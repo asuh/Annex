@@ -3,6 +3,7 @@
 ## I NEED YOUR HELP! Contact me if you can help contribute to make this better. I need some more eyes and experience to make this theme awesome. :)
 
 ## To Do List
+* Because of the complexity, certain WordPress styles should stay in the stylesheet to allow for quicker developement. I need help discerning which should be added back from Twenty Eleven.
 * Fix Footer Credit PHP to work properly when no credit is enabled
 * Update email for vCard to include Obfuscation http://www.albionresearch.com/misc/obfuscator.php
 
