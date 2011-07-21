@@ -1,0 +1,57 @@
+/* body.settings_page_annex-admin */
+#annex-options-wrap {
+  width: 100%;
+  max-width: 900px;
+  padding: 3em;
+}
+
+#annex-options-wrap h2 {
+  margin-bottom:2em;
+}
+
+#annex-options-wrap #icon-tools {
+  position: relative;
+  top: -10px;
+}
+
+#annex-options-wrap input[type="checkbox"] {
+  float:left;
+  margin:0 6px 0 -20px;
+}
+
+#annex-options-wrap p label {
+	width: 140px;
+	display: inline-block;
+}
+
+#annex-options-wrap p input {
+  border-color:#666;
+}
+
+#annex-options-wrap table.form-table tr {
+	border-top:1px solid #666;
+}
+
+#annex-options-wrap table.form-table tr:nth-child(odd){
+	background:#ccc;
+}
+
+#annex-options-wrap table.form-table td {
+	padding:8px 10px 8px 20px;
+}
+
+#annex-options-wrap table.form-table p {
+	margin:0 0 .75px;
+	color:#444;
+}
+
+#annex-options-wrap code {
+	display:block;
+	font-weight: normal;
+	background:#000;
+	color:lime;
+}
+
+#annex-options-wrap p code {
+	display:inline;
+}
