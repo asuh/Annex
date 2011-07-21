@@ -1,5 +1,7 @@
 #  Annex - HTML5 Boilerplate WordPress Theme
 
+## I NEED YOUR HELP! Contact me if you can help contribute to make this better. I need some more eyes and experience to make this theme awesome. :)
+
 ## To Do List
 * Fix Footer Credit PHP to work properly when no credit is enabled
 * Update email for vCard to include Obfuscation http://www.albionresearch.com/misc/obfuscator.php
