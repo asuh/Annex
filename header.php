@@ -14,6 +14,7 @@
 <!--[if IE 8]>	 <html class="no-js ie8 oldie" <?php language_attributes(); ?>><![endif]-->
 <!--[if gt IE 8]><!--><html class="no-js" <?php language_attributes(); ?>> <!--<![endif]-->
 <head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>" />
 	<title><?php
 		/*
 		 * Print the <title> tag based on what is being viewed.
