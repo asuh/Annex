@@ -14,16 +14,16 @@
 /*	1)	Add "Annex Admin" link to left-nav Admin Menu */
 
 	//	Add option if in Admin Page
-		function create_boilerplate_admin_page() {
+		function create_annex_admin_page() {
 		//	add_theme_page( $page_title, $menu_title, $capability, $menu_slug, $function);
-			add_theme_page('Annex Admin', 'Annex Admin', 'administrator', 'boilerplate-admin', 'build_boilerplate_admin_page');
+			add_theme_page('Annex Admin', 'Annex Admin', 'administrator', 'annex-admin', 'build_annex_admin_page');
 		}
-		add_action('admin_menu', 'create_boilerplate_admin_page');
+		add_action('admin_menu', 'create_annex_admin_page');
 
 	//	You get this if you click the left-column "Annex Admin" (added above)
-		function build_boilerplate_admin_page() {
+		function build_annex_admin_page() {
 		?>
-			<div id="boilerplate-options-wrap">
+			<div id="annex-options-wrap">
 				<div class="icon32" id="icon-tools"><br /></div>
 				<h2>Annex Admin</h2>
 				<p>So, there's actually a tremendous amount going on here.  If you're not familiar with <a href="http://html5boilerplate.com/">HTML5 Boilerplate</a> or the <a href="http://wordpress.org/extend/themes/twentyeleven">Twenty Eleven theme</a> (upon which this theme is based) you should check them out.</p>
@@ -31,7 +31,7 @@
 				<p>The clumsiest part of this plug-in is dealing with the CSS files.  Check the <a href="<?php echo get_template_directory_uri() ?>/readme.txt">Read Me file</a> for details on how I suggest handling them.</p>
 				<form method="post" action="options.php" enctype="multipart/form-data">
 					<?php settings_fields('plugin_options'); /* very last function on this page... */ ?>
-					<?php do_settings_sections('boilerplate-admin'); /* let's get started! */?>
+					<?php do_settings_sections('annex-admin'); /* let's get started! */?>
 					<p class="submit"><input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes'); ?>" /></p>
 				</form>
 			</div>
@@ -41,7 +41,7 @@
 /*	2)	Add Admin Page CSS if on the Admin Page */
 
 		function admin_register_head() {
-			echo '<link rel="stylesheet" href="' .get_template_directory_uri(). '/boilerplate-admin/admin-style.css" />'.PHP_EOL;
+			echo '<link rel="stylesheet" href="' .get_template_directory_uri(). '/annex-admin/admin-style.css" />'.PHP_EOL;
 		}
 		add_action('admin_head', 'admin_register_head');
 
@@ -50,22 +50,22 @@
 	//	Register form elements
 		function register_and_build_fields() { 
 			register_setting('plugin_options', 'plugin_options', 'validate_setting');
-			add_settings_section('main_section', '', 'section_cb', 'boilerplate-admin');
-			add_settings_field('toolbar', 'IE6 Image Toolbar?:', 'toolbar_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('google_chrome', 'IE-edge / Google Chrome?:', 'google_chrome_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('viewport', '<em><abbr title="iPhone, iTouch, iPad...">iThings</abbr></em> use full zoom?:', 'viewport_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('favicon', 'Got Favicon?:', 'favicon_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('favicon_ithing', 'Got <em><abbr title="iPhone, iTouch, iPad...">iThing</abbr></em> Favicon?', 'favicon_ithing_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('modernizr_js', 'Modernizr JS?:', 'modernizr_js_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('respond_js', 'Respond JS?:', 'respond_js_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('jquery_js', 'jQuery JS?:', 'jquery_js_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('plugins_js', 'jQuery Plug-ins JS?:', 'plugins_js_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('site_js', 'Site-specific JS?:', 'site_js_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('belated_png_js', 'Belated PNG JS?:', 'belated_png_js_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('chrome_frame', 'Chrome-Frame?:', 'chrome_frame_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('google_analytics_js', 'Google Analytics?:', 'google_analytics_js_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('cache_buster', 'Cache-Buster?:', 'cache_buster_setting', 'boilerplate-admin', 'main_section');
-			add_settings_field('footer_credit', 'Footer Credit?:', 'footer_credit_setting', 'boilerplate-admin', 'main_section');
+			add_settings_section('main_section', '', 'section_cb', 'annex-admin');
+			add_settings_field('toolbar', 'IE6 Image Toolbar?:', 'toolbar_setting', 'annex-admin', 'main_section');
+			add_settings_field('google_chrome', 'IE-edge / Google Chrome?:', 'google_chrome_setting', 'annex-admin', 'main_section');
+			add_settings_field('viewport', '<em><abbr title="iPhone, iTouch, iPad...">iThings</abbr></em> use full zoom?:', 'viewport_setting', 'annex-admin', 'main_section');
+			add_settings_field('favicon', 'Got Favicon?:', 'favicon_setting', 'annex-admin', 'main_section');
+			add_settings_field('favicon_ithing', 'Got <em><abbr title="iPhone, iTouch, iPad...">iThing</abbr></em> Favicon?', 'favicon_ithing_setting', 'annex-admin', 'main_section');
+			add_settings_field('modernizr_js', 'Modernizr JS?:', 'modernizr_js_setting', 'annex-admin', 'main_section');
+			add_settings_field('respond_js', 'Respond JS?:', 'respond_js_setting', 'annex-admin', 'main_section');
+			add_settings_field('jquery_js', 'jQuery JS?:', 'jquery_js_setting', 'annex-admin', 'main_section');
+			add_settings_field('plugins_js', 'jQuery Plug-ins JS?:', 'plugins_js_setting', 'annex-admin', 'main_section');
+			add_settings_field('site_js', 'Site-specific JS?:', 'site_js_setting', 'annex-admin', 'main_section');
+			add_settings_field('belated_png_js', 'Belated PNG JS?:', 'belated_png_js_setting', 'annex-admin', 'main_section');
+			add_settings_field('chrome_frame', 'Chrome-Frame?:', 'chrome_frame_setting', 'annex-admin', 'main_section');
+			add_settings_field('google_analytics_js', 'Google Analytics?:', 'google_analytics_js_setting', 'annex-admin', 'main_section');
+			add_settings_field('cache_buster', 'Cache-Buster?:', 'cache_buster_setting', 'annex-admin', 'main_section');
+			add_settings_field('footer_credit', 'Footer Credit?:', 'footer_credit_setting', 'annex-admin', 'main_section');
 		}
 		add_action('admin_init', 'register_and_build_fields');
 
@@ -203,7 +203,7 @@
 			echo '<input class="check-field" type="checkbox" name="plugin_options[plugins_js]" value="true" ' .$checked. '/>';
 			echo '<p>If you choose to use any <a href="http://plugins.jquery.com/">jQuery plug-ins</a>, I recommend downloading and concatenating them together in a single JS file, as below.  This will <a href="http://developer.yahoo.com/performance/rules.html">reduce your site\'s HTTP Requests</a>, making your site a better experience.</p>';
 			echo '<p>Selecting this option will add the following code to your pages just before the <code class="html">&lt;/body&gt;</code>:</p>';
-			echo '<code><b>&lt;</b>script type<b>=</b><span>\'text/javascript\'</span> src=<span>\'' .get_template_directory_uri().'/js/plugins.js\'</span><b>&gt;&lt;/</b>script<b>&gt;</b></code>';
+			echo '<code><b>&lt;</b>script type<b>=</b><span>\'text/javascript\'</span> src=<span>\'' .get_stylesheet_directory_uri().'/js/plugins.js\'</span><b>&gt;&lt;/</b>script<b>&gt;</b></code>';
 			echo '<p>(The single quotes and no-longer-necessary attributes are from WP, would like to fix that... maybe next update...)</p>';
 			echo '<p><strong>Note: If you do <em>not</em> include jQuery, this file will <em>not</em> be added to the page.</strong></p>';
 		}
@@ -214,10 +214,10 @@
 			$checked = (isset($options['site_js']) && $options['site_js']) ? 'checked="checked" ' : '';
 			echo '<input class="check-field" type="checkbox" name="plugin_options[site_js]" value="true" ' .$checked. '/>';
 			echo '<p>If you would like to add your own site JavaScript file, Annex provides a starter file located in:</p>';
-			echo '<code><span>' .get_template_directory_uri(). '/js/script.js</span></code>';
+			echo '<code><span>' .get_stylesheet_directory_uri(). '/js/script.js</span></code>';
 			echo '<p>Add what you want to that file and select this option.</p>';
 			echo '<p>Selecting this option will add the following code to your pages just before the <code class="html">&lt;/body&gt;</code>:</p>';
-			echo '<code><b>&lt;</b>script type<b>=</b><span>\'text/javascript\'</span> src=<span>\'' .get_template_directory_uri().'/js/script.js\'</span><b>&gt;&lt;/</b>script<b>&gt;</b></code>';
+			echo '<code><b>&lt;</b>script type<b>=</b><span>\'text/javascript\'</span> src=<span>\'' .get_stylesheet_directory_uri().'/js/script.js\'</span><b>&gt;&lt;/</b>script<b>&gt;</b></code>';
 			echo '<p>(The single quotes and no-longer-necessary attributes are from WP, would like to fix that... maybe next update...)</p>';
 		}
 
@@ -366,14 +366,14 @@
 	//	$options['plugins_js']
 		function add_plugin_script() {
 			$cache = cache_buster();
-			wp_register_script( 'plug_ins', get_template_directory_uri() . '/js/plugins.js', array('jquery'), str_replace('?ver=','',$cache), true );
+			wp_register_script( 'plug_ins', get_stylesheet_directory_uri() . '/js/plugins.js', array('jquery'), str_replace('?ver=','',$cache), true );
 			wp_enqueue_script( 'plug_ins' );
 		}
 
 	//	$options['site_js']
 		function add_site_script() {
 			$cache = cache_buster();
-			wp_register_script( 'site_script', get_template_directory_uri() . '/js/script.js', array(), str_replace('?ver=','',$cache), true );
+			wp_register_script( 'site_script', get_stylesheet_directory_uri() . '/js/script.js', array(), str_replace('?ver=','',$cache), true );
 			wp_enqueue_script( 'site_script' );
 		}
 
