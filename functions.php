@@ -725,7 +725,9 @@ add_action('login_head', 'annex_custom_login_logo');
 
 // Add Annex Admin Panel
 locate_template( 'annex-admin/admin-menu.php', true );
-	
+
+// Custom Hooks
+function annex_credits() { do_action('annex_credits'); } //footer credit	
  
 /**
 * END Annex
