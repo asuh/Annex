@@ -748,6 +748,16 @@ function annex_language_attributes() {
 
 add_filter('language_attributes', 'annex_language_attributes');
 
+// http://www.deluxeblogtips.com/2011/01/remove-dashboard-widgets-in-wordpress.html
+function annex_remove_dashboard_widgets() {
+	remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
+	remove_meta_box('dashboard_plugins', 'dashboard', 'normal');
+	remove_meta_box('dashboard_primary', 'dashboard', 'normal');
+	remove_meta_box('dashboard_secondary', 'dashboard', 'normal');
+}
+
+add_action('admin_init', 'annex_remove_dashboard_widgets');
+
 /**
 * END Annex
 */
