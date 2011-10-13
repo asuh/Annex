@@ -728,7 +728,24 @@ locate_template( 'annex-admin/admin-menu.php', true );
 
 // Custom Hooks
 function annex_credits() { do_action('annex_credits'); } //footer credit	
- 
+
+// remove dir and set lang="en" as default (rather than en-US)
+// https://github.com/retlehs/roots/issues/80
+function annex_language_attributes() {
+	$attributes = array();
+	$output = '';
+	$lang = get_bloginfo('language');
+	if ($lang && $lang !== 'en-US') {
+		$attributes[] = "lang=\"$lang\"";
+	} else {
+		$attributes[] = 'lang="en"';
+	}
+
+	$output = implode(' ', $attributes);
+	$output = apply_filters('annex_language_attributes', $output);
+	return $output;
+}
+
 /**
 * END Annex
 */
