@@ -567,16 +567,38 @@ function enable_threaded_comments(){
 }
 add_action('get_header', 'enable_threaded_comments');
 
+// remove version info from head and feeds
+// http://digwp.com/2010/04/wordpress-custom-functions-php-template-part-2/
+function complete_version_removal() {
+	return '';
+}
+
+// remove CSS from recent comments widget
+function annex_remove_recent_comments_style() {
+	global $wp_widget_factory;
+	if (isset($wp_widget_factory->widgets['WP_Widget_Recent_Comments'])) {
+		remove_action('wp_head', array($wp_widget_factory->widgets['WP_Widget_Recent_Comments'], 'recent_comments_style'));
+	}
+}
+
+// remove CSS from gallery
+function annex_gallery_style($css) {
+	return preg_replace("!<style type='text/css'>(.*?)</style>!s", '', $css);
+}
+
 // remove junk from head
-remove_action('wp_head', 'rsd_link');
-remove_action('wp_head', 'wp_generator');
-remove_action('wp_head', 'feed_links', 2);
-remove_action('wp_head', 'index_rel_link');
-remove_action('wp_head', 'wlwmanifest_link');
-remove_action('wp_head', 'feed_links_extra', 3);
-remove_action('wp_head', 'start_post_rel_link', 10, 0);
-remove_action('wp_head', 'parent_post_rel_link', 10, 0);
-remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
+	remove_action('wp_head', 'rsd_link');
+	remove_action('wp_head', 'wp_generator');
+	remove_action('wp_head', 'feed_links', 2);
+	remove_action('wp_head', 'index_rel_link');
+	remove_action('wp_head', 'wlwmanifest_link');
+	remove_action('wp_head', 'feed_links_extra', 3);
+	remove_action('wp_head', 'start_post_rel_link', 10, 0);
+	remove_action('wp_head', 'parent_post_rel_link', 10, 0);
+	remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
+	   add_action('wp_head', 'annex_remove_recent_comments_style', 1);	
+	   add_filter('gallery_style', 'annex_gallery_style');
+	   add_filter('the_generator', 'complete_version_removal');
 
 // kill the admin nag
 if (!current_user_can('edit_users')) {
@@ -584,12 +606,6 @@ if (!current_user_can('edit_users')) {
 	add_filter('pre_option_update_core', create_function('$a', "return null;"));
 }
 
-// remove version info from head and feeds
-// http://digwp.com/2010/04/wordpress-custom-functions-php-template-part-2/
-function complete_version_removal() {
-	return '';
-}
-add_filter('the_generator', 'complete_version_removal');
 
 // remove login errors
 // http://tutzone.net/2011/02/how-to-hide-login-errors-in-wordpress.html
@@ -730,7 +746,7 @@ locate_template( 'annex-admin/admin-menu.php', true );
 function annex_credits() { do_action('annex_credits'); } //footer credit	
 
 // remove dir and set lang="en" as default (rather than en-US)
-// https://github.com/retlehs/roots/issues/80
+// https://github.com/retlehs/annex/issues/80
 function annex_language_attributes() {
 	$attributes = array();
 	$output = '';
