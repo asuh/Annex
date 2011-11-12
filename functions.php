@@ -746,7 +746,7 @@ locate_template( 'annex-admin/admin-menu.php', true );
 function annex_credits() { do_action('annex_credits'); } //footer credit	
 
 // remove dir and set lang="en" as default (rather than en-US)
-// https://github.com/retlehs/annex/issues/80
+// https://github.com/retlehs/roots/issues/80
 function annex_language_attributes() {
 	$attributes = array();
 	$output = '';
