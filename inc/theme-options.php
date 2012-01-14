@@ -17,8 +17,6 @@
  */
 function annex_admin_enqueue_scripts( $hook_suffix ) {
 	wp_enqueue_style( 'annex-theme-options', get_template_directory_uri() . '/inc/theme-options.css', false, '2011-04-28' );
-	wp_enqueue_script( 'annex-theme-options', get_template_directory_uri() . '/inc/theme-options.js', array( 'farbtastic' ), '2011-06-10' );
-	wp_enqueue_style( 'farbtastic' );
 }
 add_action( 'admin_print_styles-appearance_page_theme_options', 'annex_admin_enqueue_scripts' );
 
@@ -57,14 +55,12 @@ function annex_theme_options_init() {
 
 	// Register our individual settings fields
 	add_settings_field(
-		'color_scheme',  // Unique identifier for the field for this section
 		__( 'Color Scheme', 'annex' ), // Setting field label
 		'annex_settings_field_color_scheme', // Function that renders the settings field
 		'theme_options', // Menu slug, used to uniquely identify the page; see annex_theme_options_add_page()
 		'general' // Settings section. Same as the first argument in the add_settings_section() above
 	);
 
-	add_settings_field( 'link_color', __( 'Link Color',     'annex' ), 'annex_settings_field_link_color', 'theme_options', 'general' );
 	add_settings_field( 'layout',     __( 'Default Layout', 'annex' ), 'annex_settings_field_layout',     'theme_options', 'general' );
 }
 add_action( 'admin_init', 'annex_theme_options_init' );
