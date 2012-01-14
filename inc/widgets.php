@@ -75,51 +75,49 @@ class Twenty_Eleven_Ephemera_Widget extends WP_Widget {
 		$ephemera = new WP_Query( $ephemera_args );
 
 		if ( $ephemera->have_posts() ) :
-
-		echo $before_widget;
-		echo $before_title;
-		echo $title; // Can set this with a widget option, or omit altogether
-		echo $after_title;
-
-		?>
-		<ol>
-		<?php while ( $ephemera->have_posts() ) : $ephemera->the_post(); ?>
-
-			<?php if ( 'link' != get_post_format() ) : ?>
-
-			<li class="widget-entry-title">
-				<a href="<?php echo esc_url( get_permalink() ); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'annex' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a>
-				<span class="comments-link">
-					<?php comments_popup_link( __( '0 <span class="reply">comments &rarr;</span>', 'annex' ), __( '1 <span class="reply">comment &rarr;</span>', 'annex' ), __( '% <span class="reply">comments &rarr;</span>', 'annex' ) ); ?>
-				</span>
-			</li>
-
-			<?php else : ?>
-
-			<li class="widget-entry-title">
-				<?php
-					// Grab first link from the post content. If none found, use the post permalink as fallback.
-					$link_url = annex_url_grabber();
-
-					if ( empty( $link_url ) )
-						$link_url = get_permalink();
+				echo $before_widget;
+				echo $before_title;
+				echo $title; // Can set this with a widget option, or omit altogether
+				echo $after_title;
 				?>
-				<a href="<?php echo esc_url( $link_url ); ?>" title="<?php printf( esc_attr__( 'Link to %s', 'annex' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?>&nbsp;<span>&rarr;</span></a>
-				<span class="comments-link">
-					<?php comments_popup_link( __( '0 <span class="reply">comments &rarr;</span>', 'annex' ), __( '1 <span class="reply">comment &rarr;</span>', 'annex' ), __( '% <span class="reply">comments &rarr;</span>', 'annex' ) ); ?>
-				</span>
-			</li>
+				<ol>
+				<?php while ( $ephemera->have_posts() ) : $ephemera->the_post(); ?>
 
-			<?php endif; ?>
+					<?php if ( 'link' != get_post_format() ) : ?>
 
-		<?php endwhile; ?>
-		</ol>
-		<?php
+					<li class="widget-entry-title">
+						<a href="<?php echo esc_url( get_permalink() ); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'annex' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a>
+						<span class="comments-link">
+							<?php comments_popup_link( __( '0 <span class="reply">comments &rarr;</span>', 'annex' ), __( '1 <span class="reply">comment &rarr;</span>', 'annex' ), __( '% <span class="reply">comments &rarr;</span>', 'annex' ) ); ?>
+						</span>
+					</li>
 
-		echo $after_widget;
+					<?php else : ?>
 
-		// Reset the post globals as this query will have stomped on it
-		wp_reset_postdata();
+					<li class="widget-entry-title">
+						<?php
+							// Grab first link from the post content. If none found, use the post permalink as fallback.
+							$link_url = annex_url_grabber();
+
+							if ( empty( $link_url ) )
+								$link_url = get_permalink();
+						?>
+						<a href="<?php echo esc_url( $link_url ); ?>" title="<?php printf( esc_attr__( 'Link to %s', 'annex' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?>&nbsp;<span>&rarr;</span></a>
+						<span class="comments-link">
+							<?php comments_popup_link( __( '0 <span class="reply">comments &rarr;</span>', 'annex' ), __( '1 <span class="reply">comment &rarr;</span>', 'annex' ), __( '% <span class="reply">comments &rarr;</span>', 'annex' ) ); ?>
+						</span>
+					</li>
+
+					<?php endif; ?>
+
+			<?php endwhile; ?>
+			</ol>
+			<?php
+
+			echo $after_widget;
+
+			// Reset the post globals as this query will have stomped on it
+			wp_reset_postdata();
 
 		// end check for ephemeral posts
 		endif;

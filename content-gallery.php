@@ -84,7 +84,7 @@
 		<?php if ( $show_sep ) : ?>
 		<span class="sep"> | </span>
 		<?php endif; // End if $show_sep ?>
-		<span class="comments-link"><?php comments_popup_link( '<span class="leave-reply">' . __( 'Leave a Reply', 'annex' ) . '</span>', __( '<b>1</b> Reply', 'annex' ), __( '<b>%</b> Replies', 'annex' ) ); ?></span>
+		<span class="comments-link"><?php comments_popup_link( '<span class="leave-reply">' . __( 'Leave a reply', 'annex' ) . '</span>', __( '<b>1</b> Reply', 'annex' ), __( '<b>%</b> Replies', 'annex' ) ); ?></span>
 		<?php endif; // End if comments_open() ?>
 
 		<?php edit_post_link( __( 'Edit', 'annex' ), '<span class="edit-link">', '</span>' ); ?>

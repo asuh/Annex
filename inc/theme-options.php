@@ -17,6 +17,8 @@
  */
 function annex_admin_enqueue_scripts( $hook_suffix ) {
 	wp_enqueue_style( 'annex-theme-options', get_template_directory_uri() . '/inc/theme-options.css', false, '2011-04-28' );
+	wp_enqueue_script( 'annex-theme-options', get_template_directory_uri() . '/inc/theme-options.js', array( 'farbtastic' ), '2011-06-10' );
+	wp_enqueue_style( 'farbtastic' );
 }
 add_action( 'admin_print_styles-appearance_page_theme_options', 'annex_admin_enqueue_scripts' );
 
@@ -40,10 +42,30 @@ function annex_theme_options_init() {
 		add_option( 'annex_theme_options', annex_get_default_theme_options() );
 
 	register_setting(
-		'annex_options',       // Options group, see settings_fields() call in theme_options_render_page()
+		'annex_options',       // Options group, see settings_fields() call in annex_theme_options_render_page()
 		'annex_theme_options', // Database option, see annex_get_theme_options()
 		'annex_theme_options_validate' // The sanitization callback, see annex_theme_options_validate()
 	);
+
+	// Register our settings field group
+	add_settings_section(
+		'general', // Unique identifier for the settings section
+		'', // Section title (we don't want one)
+		'__return_false', // Section callback (we don't want anything)
+		'theme_options' // Menu slug, used to uniquely identify the page; see annex_theme_options_add_page()
+	);
+
+	// Register our individual settings fields
+	add_settings_field(
+		'color_scheme',  // Unique identifier for the field for this section
+		__( 'Color Scheme', 'annex' ), // Setting field label
+		'annex_settings_field_color_scheme', // Function that renders the settings field
+		'theme_options', // Menu slug, used to uniquely identify the page; see annex_theme_options_add_page()
+		'general' // Settings section. Same as the first argument in the add_settings_section() above
+	);
+
+	add_settings_field( 'link_color', __( 'Link Color',     'annex' ), 'annex_settings_field_link_color', 'theme_options', 'general' );
+	add_settings_field( 'layout',     __( 'Default Layout', 'annex' ), 'annex_settings_field_layout',     'theme_options', 'general' );
 }
 add_action( 'admin_init', 'annex_theme_options_init' );
 
@@ -85,18 +107,39 @@ function annex_theme_options_add_page() {
 	if ( ! $theme_page )
 		return;
 
+	add_action( "load-$theme_page", 'annex_theme_options_help' );
+}
+add_action( 'admin_menu', 'annex_theme_options_add_page' );
+
+function annex_theme_options_help() {
+
 	$help = '<p>' . __( 'Some themes provide customization options that are grouped together on a Theme Options screen. If you change themes, options may change or disappear, as they are theme-specific. Your current theme, Annex, provides the following Theme Option:', 'annex' ) . '</p>' .
 			'<ol>' .
 				'<li>' . __( '<strong>Default Layout</strong>: You can choose if you want your site&#8217;s default layout to have a sidebar on the left, the right, or not at all.', 'annex' ) . '</li>' .
 			'</ol>' .
-			'<p>' . __( 'Remember to click "Save Changes" to save any changes you have made to the theme options.', 'annex' ) . '</p>' .
-			'<p><strong>' . __( 'For more information:', 'annex' ) . '</strong></p>' .
-			'<p>' . __( '<a href="http://codex.wordpress.org/Appearance_Theme_Options_Screen" target="_blank">Documentation on Theme Options</a>', 'annex' ) . '</p>' .
-			'<p>' . __( '<a href="http://wordpress.org/support/" target="_blank">Support Forums</a>', 'annex' ) . '</p>';
+			'<p>' . __( 'Remember to click "Save Changes" to save any changes you have made to the theme options.', 'annex' ) . '</p>';
 
-	add_contextual_help( $theme_page, $help );
+	$sidebar = '<p><strong>' . __( 'For more information:', 'annex' ) . '</strong></p>' .
+		'<p>' . __( '<a href="http://codex.wordpress.org/Appearance_Theme_Options_Screen" target="_blank">Documentation on Theme Options</a>', 'annex' ) . '</p>' .
+		'<p>' . __( '<a href="http://wordpress.org/support/" target="_blank">Support Forums</a>', 'annex' ) . '</p>';
+
+	$screen = get_current_screen();
+
+	if ( method_exists( $screen, 'add_help_tab' ) ) {
+		// WordPress 3.3
+		$screen->add_help_tab( array(
+			'title' => __( 'Overview', 'annex' ),
+			'id' => 'theme-options-help',
+			'content' => $help,
+			)
+		);
+
+		$screen->set_help_sidebar( $sidebar );
+	} else {
+		// WordPress 3.2
+		add_contextual_help( $screen, $help . $sidebar );
+	}
 }
-add_action( 'admin_menu', 'annex_theme_options_add_page' );
 
 /**
  * Returns an array of layout options registered for Twenty Eleven.
@@ -151,6 +194,28 @@ function annex_get_theme_options() {
 }
 
 /**
+ * Renders the Layout setting field.
+ *
+ * @since Twenty Eleven 1.3
+ */
+function annex_settings_field_layout() {
+	$options = annex_get_theme_options();
+	foreach ( annex_layouts() as $layout ) {
+		?>
+		<div class="layout image-radio-option theme-layout">
+		<label class="description">
+			<input type="radio" name="annex_theme_options[theme_layout]" value="<?php echo esc_attr( $layout['value'] ); ?>" <?php checked( $options['theme_layout'], $layout['value'] ); ?> />
+			<span>
+				<img src="<?php echo esc_url( $layout['thumbnail'] ); ?>" width="136" height="122" alt="" />
+				<?php echo $layout['label']; ?>
+			</span>
+		</label>
+		</div>
+		<?php
+	}
+}
+
+/**
  * Returns the options array for Twenty Eleven.
  *
  * @since Twenty Eleven 1.2
@@ -165,35 +230,9 @@ function annex_theme_options_render_page() {
 		<form method="post" action="options.php">
 			<?php
 				settings_fields( 'annex_options' );
-				$options = annex_get_theme_options();
-				$default_options = annex_get_default_theme_options();
+				do_settings_sections( 'theme_options' );
+				submit_button();
 			?>
-
-			<table class="form-table">
-				<tr valign="top" class="image-radio-option theme-layout"><th scope="row"><?php _e( 'Default Layout', 'annex' ); ?></th>
-					<td>
-						<fieldset><legend class="screen-reader-text"><span><?php _e( 'Color Scheme', 'annex' ); ?></span></legend>
-						<?php
-							foreach ( annex_layouts() as $layout ) {
-								?>
-								<div class="layout">
-								<label class="description">
-									<input type="radio" name="annex_theme_options[theme_layout]" value="<?php echo esc_attr( $layout['value'] ); ?>" <?php checked( $options['theme_layout'], $layout['value'] ); ?> />
-									<span>
-										<img src="<?php echo esc_url( $layout['thumbnail'] ); ?>" width="136" height="122" alt="" />
-										<?php echo $layout['label']; ?>
-									</span>
-								</label>
-								</div>
-								<?php
-							}
-						?>
-						</fieldset>
-					</td>
-				</tr>
-			</table>
-
-			<?php submit_button(); ?>
 		</form>
 	</div>
 	<?php
