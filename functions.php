@@ -743,8 +743,15 @@ add_action('login_head', 'annex_custom_login_logo');
 // Add Annex Admin Panel
 locate_template( 'annex-admin/admin-menu.php', true );
 
-// Custom Hooks
-function annex_credits() { do_action('annex_credits'); } //footer credit	
+// IE Chrome Frame custom hook
+function ie_chrome_frame() {
+	do_action('ie_chrome_frame');
+}
+
+// Boilerplate Footer Credits Custom Hook
+function annex_credits() {
+	do_action('annex_credits');
+}
 
 // remove dir and set lang="en" as default (rather than en-US)
 // https://github.com/retlehs/roots/issues/80

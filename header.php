@@ -52,6 +52,7 @@
 </head>
 
 <body <?php body_class(); ?>>
+	<?php ie_chrome_frame(); ?>
 <div id="page" class="hfeed">
 	<header id="branding" role="banner">
 			<hgroup>
