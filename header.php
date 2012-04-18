@@ -9,9 +9,9 @@
  * @since Annex 1.0
  */
 ?><!DOCTYPE html>
-<!--[if lt IE 7]><html class="no-js ie6 oldie" <?php language_attributes(); ?>><![endif]-->
-<!--[if IE 7]>	 <html class="no-js ie7 oldie" <?php language_attributes(); ?>><![endif]-->
-<!--[if IE 8]>	 <html class="no-js ie8 oldie" <?php language_attributes(); ?>><![endif]-->
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" <?php language_attributes(); ?>><![endif]-->
+<!--[if IE 7]>	 <html class="no-js lt-ie9 lt-ie8" <?php language_attributes(); ?>><![endif]-->
+<!--[if IE 8]>	 <html class="no-js lt-ie9" <?php language_attributes(); ?>><![endif]-->
 <!--[if gt IE 8]><!--><html class="no-js" <?php language_attributes(); ?>> <!--<![endif]-->
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>" />
@@ -37,9 +37,11 @@
 
 		?></title>
 
-	<link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
+	<link rel="stylesheet" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
+	
 	<link rel="profile" href="http://gmpg.org/xfn/11" />
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
+	<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> Feed" href="<?php echo home_url(); ?>/feed/">
 
 	<?php
 		/* Always have wp_head() just before the closing </head>

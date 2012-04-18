@@ -49,11 +49,19 @@
 	display:block;
 	font-weight: normal;
 	background:#141414;
-	color:#E8ED97;
+	color:#f9ee98;
 }
 
 #annex-options-wrap code span {
-	color: #a0c25f;
+	color: #8f9d6a;
+}
+
+#annex-options-wrap code span.support {
+	color: #ac98ac;
+}
+
+#annex-options-wrap code span.constant {
+	color: #cf6a4c;
 }
 
 #annex-options-wrap code b {
@@ -63,7 +71,7 @@
 
 
 #annex-options-wrap code.comment {
-	color: #666;
+	color: #5f5a60;
 }
 
 #annex-options-wrap code.html {

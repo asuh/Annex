@@ -1,6 +1,6 @@
 === Theme Name ===
 Contributors: aarontgrogg
-Tags: html5, boilerplate, annex
+Tags: html5, boilerplate
 
 Based on the HTML5 Boilerplate created by Paul Irish and Divya Manian,
 this allows for easy inclusion/removal of all HTML5 Boilerplate options.
@@ -36,14 +36,45 @@ The plug-in can be added to any existing or new theme, allowing the easy additio
 all the delicious HTML5 Boilerplate goodiness with the ease of checking checkboxes.
 
 Please let me know if you have any questions/suggestions/thoughts,
-Micah
-[http://twolanedesign.com/](http://twolanedesign.com/)
-[micah@twolanedesign.com](mailto:micah@twolanedesign.com)
+Atg
+[http://aarontgrogg.com/](http://aarontgrogg.com/)
+[aarontgrogg@gmail.com](mailto:aarontgrogg@gmail.com)
 
 
 === Change Log ===
-= v.3.2 2011-07-20 =
-Updated theme to work with Twenty Eleven
+
+= 3.4.4 2012-03-10 =
+
+Fixing a bad URL in several custom CSS and JS strings, where:
+...`BP_THEME_URL. 'js`...
+should have been:
+...`BP_THEME_URL. '/js`...
+Muchas gracias a Benjamin Arnedo!
+
+
+= 3.4.3 2012-03-01 =
+
+Updated admin-menu.php to permit the Boilerplate Theme and HTML5 Boilerplate Plug-in to exist side-by-side.  In this case, the Plug-in functionality will persist and the Theme functionality will lie dormant.
+
+
+= 3.4.2 2012-02-25 =
+
+Removed boilerplate_category_id_class from functions.php; if you want this functionality, I recommend installing this plug-in:
+  http://wordpress.org/extend/plugins/add-url-slugs-as-body-classes/
+
+Altered boilerplate_posted_on function to reflect three Archive links rather than a single permalink to Post; thanks to Alexander Bailey for the idea!
+
+
+= 3.4.1 2012-02-24 =
+
+(I bumped-up the version number a bit to match the HTML5 Boilerplate Plug-in numbering.)
+* Converted `... />` to  `...>` for all the stuff this plug-in writes to the page.
+* Updated `/css/style-starter.css` to latest HTML5 Boilerplate version.
+* Updated jQuery to 1.7.1.
+* Updated Modernizr to 2.5.3, Custom Build.
+* Added 57x57 iThing favicon link.
+* Fixed Bug introduced by WP 3.3+ that causes jQuery to be loaded after site-specific JS.
+
 
 = v.3.0 2011-06-02 =
 
@@ -97,6 +128,7 @@ Enhanced Boilerplate Admin panel, offering slightly improved explanations.
 // Trying once again to get WP to allow the inclusion of Google Analytics block option in Boilerplate Admin panel.
 // Nope, automated upload process still blocks any reference to this...
 
+
 = v.2.1.4 2011-01-14 =
 
 Removed extraneous > in 404.php (thanks, Dominic!)
@@ -104,6 +136,7 @@ Removed extraneous > in 404.php (thanks, Dominic!)
 Miscellaneous updates from http://html5boilerplate.com/
 
 Per WP, reduced size of screenshot.png.
+
 
 = v.2.1 2010-11-14 =
 
@@ -145,6 +178,7 @@ Grabbed updated assets (css, js, etc.) from github per:
 - http://github.com/paulirish/html5-boilerplate/compare/v0.9...v0.9.1
 - http://github.com/paulirish/html5-boilerplate/compare/v0.9.1...v0.9.5
 
+
 = v.2.0.1 2010-10-06 =
 
 Boilerplate starts with the Starkers theme (http://starkerstheme.com/)...
@@ -163,6 +197,7 @@ Boilerplate starts with the Starkers theme (http://starkerstheme.com/)...
 Be sure to read these "read me" type files as well:
 	- _READ_ME.txt and _LICENSE.txt are from Starkers Theme
 	- README.markdown is from HTML5 Boilerplate
+
 
 = v.1.0 2010-10-01 =
 
