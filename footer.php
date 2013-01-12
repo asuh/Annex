@@ -23,7 +23,6 @@
 			?>
 
 			<div id="site-generator">
-				<?php do_action( 'annex_credits' ); ?>
 				<a href="<?php echo esc_url( __( 'http://wordpress.org/', 'annex' ) ); ?>" title="<?php esc_attr_e( 'Semantic Personal Publishing Platform', 'annex' ); ?>" rel="generator"><?php printf( __( 'Proudly powered by %s', 'annex' ), 'WordPress' ); ?></a>
 			</div><!-- #site-generator -->
 			
