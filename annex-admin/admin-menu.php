@@ -104,8 +104,8 @@
 		//	Register form elements
 		if ( ! function_exists( 'H5BP_Annex_register_and_build_fields' ) ):
 			function H5BP_Annex_register_and_build_fields() {
-				register_setting('H5BP_Annex_plugin_options', 'plugin_options', 'H5BP_Annex_validate_setting');
-				add_settings_section('H5BP_Annex_main_section', '', 'H5BP_Annex_section_cb', 'annex-admin');
+				register_setting('plugin_options', 'plugin_options', 'H5BP_Annex_validate_setting');
+				add_settings_section('main_section', '', 'H5BP_Annex_section_cb', 'annex-admin');
 				add_settings_field('H5BP_Annex_google_chrome', 'IE-edge / Google Chrome?:', 'H5BP_Annex_google_chrome_setting', 'annex-admin', 'main_section');
 				add_settings_field('H5BP_Annex_google_verification', 'Google Verification?:', 'H5BP_Annex_google_verification_setting', 'annex-admin', 'main_section');
 				add_settings_field('H5BP_Annex_viewport', '<em><abbr title="iPhone, iTouch, iPad...">iThings</abbr></em> use full zoom?:', 'H5BP_Annex_viewport_setting', 'annex-admin', 'main_section');
