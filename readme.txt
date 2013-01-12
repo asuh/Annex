@@ -1,5 +1,5 @@
 === Theme Name ===
-Contributors: aarontgrogg
+Contributors: aarontgrogg, micah cambre
 Tags: html5, boilerplate
 
 Based on the HTML5 Boilerplate created by Paul Irish and Divya Manian,
@@ -14,17 +14,14 @@ with me, it'll all make sense in a bit, I promise.
 Standing on the foreheads of giants (namely [Paul Irish](http://paulirish.com/)
 and [Divya Manian](http://nimbupani.com/) and the good folks that have helped
 them create and continue the growth of HTML5 Boilerplate, I present to you my
-first WordPress theme, [Boilerplate - Starkers WP Theme](http://aarontgrogg.com/boilerplate/).
+first WordPress theme, [H5Bp Annex - HTML5 Boilerplate Annex](http://github.com/asuh/annex/).
 
-The clumsiest part of this plug-in is dealing with the CSS files.
+The clumsiest part of this is dealing with the Boilerplate CSS and JS files.
 To avoid any changes you make from being overwritten during upgrades,
-"starter" files have been created in the plug-in's css directory.
-I recommend copying the contents of the starter files into new files that you
-can safely edit.  That way, if the starter files are updated later, you can
-simply copy/paste from them into your files again, and all is fine.
+"starter" files have been created in the `/js` directory.
 
-Another route would be to add `@import` statements at the top of
-your file, but this does increase your HTTP Requests, which hurts performance...
+Another route would be to add additional links in your pages, but this does increase
+your HTTP Requests, which hurts performance...
 Your call, let me know if you can think of a better implementation.
 
 More about this theme can be found at:
@@ -33,7 +30,7 @@ More about this theme can be found at:
 I also built a Boilerplate plug-in that can be found at:
 [http://aarontgrogg.com/html5boilerplate/](http://aarontgrogg.com/html5boilerplate/).
 The plug-in can be added to any existing or new theme, allowing the easy additional of
-all the delicious HTML5 Boilerplate goodiness with the ease of checking checkboxes.
+all the delicious HTML5 Boilerplate goodness with the ease of checking checkboxes.
 
 Please let me know if you have any questions/suggestions/thoughts,
 Atg
@@ -42,6 +39,42 @@ Atg
 
 
 === Change Log ===
+
+= 4.1 2012-11-14 =
+* Fixed an issue where the `html5shiv.js` was getting applied to a page 2-3 times in IE < 9...  erps!
+
+= 4.0.1 2012-10-05 =
+Let's try that again...
+
+= 4.0 2012-09-28 =
+NOTE:
+  I find myelf at a very troublesome crossroads with the good folks of HTM5Boilerplate project...
+  With the release of their 4.0, they have greatly changed a number of structure items, such as directory and file names
+  that will work just fine for their project, because it is intended as a starting point for new projects, but is somewhat
+  problematic for things like WP Themes & Plugins, as they tend to serve initially as starting points, but then quickly become
+  something that must be updatable, and therefore be backwards-compatible...  And splitting `/css/style.css` into `/css/normalize.css`
+  and `/css/main.css` could cause issues for developers already using a Theme/Plugin.  So, in the interest of my users, I am staying
+  with the old directory and file names, regardless of the additional work this will cause me.  I hope this doesn't confuse anyone...
+
+* Updated jQuery to 1.8.2
+* Updated Modernizr to 2.6.2
+* Updated `/css/style-starter.css` to latest HTML5 Boilerplate version (combination of `/css/normalize.css` and `/css/main.css`)
+* Updated `/js/plugins.js` to latest HTML5 Boilerplate version
+* Updated `/js/respond.js` to latest version: https://github.com/scottjehl/respond (keeping this separate from Modernizr, as you might only want one)
+* Updated `/js/ieshiv.js` to latest version: https://raw.github.com/aFarkas/html5shiv
+* Updated `functions.php` to replace functions `add_custom_image_header` & `add_custom_background` (deprecated as of 3.4) with `add_theme_support`
+* Added `/js/plugins-starter.js` file to prevent overwrites during Theme upgrades
+* Added ability to force custom site-specific JS into the `&lt;head&gt;` instead of before the `&lt;/body&gt;`
+* Added "H5BP_" namespace to all functions & `plugin_options` names in `admin-menu.php`
+* Added `if ( ! function_exists( ... ) )` to all functions in `admin-menu.php`
+* Added `&lt;link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"&gt;` option
+* Added `/doc` directory from latest HTML5 Boilerplate version
+* Added `readme.md` from latest HTML5 Boilerplate version
+* Added "Check All | Uncheck All" links to top of BP Admin form
+* Added Espanol translation, muchos gracias otra vez a Benjamin Arnedo!
+* Restored `get_header_image` to `header.php`, not sure why that was missing; thanks to Ted Thompson!
+* Reordered apple-touch-icon links per H5BP docs; thanks once again, Micah!
+* Moved the `boilerplate_search_form` function from `functions.php`, where it happened automatically, to an option in the Boilerplate Admin, and renamed it as `H5BP_search_form`
 
 = 3.4.4 2012-03-10 =
 
