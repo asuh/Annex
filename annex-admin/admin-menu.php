@@ -13,7 +13,7 @@
 		More about this theme can be found at <a href="http://https://github.com/asuh/Annex">http://https://github.com/asuh/Annex</a>.
 	Author: Two Lane Design
 	Author URI: http://twolanedesign.com/
-	Version: 10.1
+	Version: 10.3.2
 	Tags: custom-menu, editor-style, theme-options, threaded-comments, sticky-post, microformats, rtl-language-support, translation-ready
 
 	License: GNU General Public License v2.0
@@ -26,12 +26,13 @@
 
 /*
 	There are essentially 5 sections to this:
-	1)	Add "Annex Admin" link to left-nav Admin Menu & callback function for clicking that menu link
+	1)	Add "H5Bp Annex" link to left-nav Admin Menu & callback function for clicking that menu link
 	2)	Add Admin Page CSS if on the Admin Page
 	3)	Add "Annex Admin" Page options
 	4)	Create functions to add above elements to pages
 	5)	Add Annex options to page as requested
 */
+
 
 /*	Begin H5Bp Annex Admin panel. */
 
@@ -40,7 +41,7 @@
 		//	Add option if in Admin Page
 		if ( ! function_exists( 'H5BP_Annex_create_annex_admin_page' ) ):
 			function H5BP_Annex_create_annex_admin_page() {
-				add_theme_page('H5Bp Annex Admin', 'Annex Admin', 'administrator', 'annex-admin', 'H5BP_Annex_build_annex_admin_page');
+				add_theme_page('H5Bp Annex Admin', 'H5Bp Annex', 'administrator', 'annex-admin', 'H5BP_Annex_build_annex_admin_page');
 			}
 		endif; // H5BP_Annex_create_annex_admin_page
 		add_action('admin_menu', 'H5BP_Annex_create_annex_admin_page');
@@ -117,6 +118,7 @@
 				add_settings_field('H5BP_Annex_plugins_js', 'jQuery Plug-ins JS?:', 'H5BP_Annex_plugins_js_setting', 'annex-admin', 'main_section');
 				add_settings_field('H5BP_Annex_site_js', 'Site-specific JS?:', 'H5BP_Annex_site_js_setting', 'annex-admin', 'main_section');
 				add_settings_field('H5BP_Annex_chrome_frame', 'Chrome-Frame?:', 'H5BP_Annex_chrome_frame_setting', 'annex-admin', 'main_section');
+				add_settings_field('H5BP_Annex_search_form', 'HTML5 Search?:', 'H5BP_Annex_search_form_setting', 'annex-admin', 'main_section');
 				add_settings_field('H5BP_Annex_google_analytics_js', 'Google Analytics?:', 'H5BP_Annex_google_analytics_js_setting', 'annex-admin', 'main_section');
 				add_settings_field('H5BP_Annex_cache_buster', 'Cache-Buster?:', 'H5BP_Annex_cache_buster_setting', 'annex-admin', 'main_section');
 				add_settings_field('H5BP_Annex_footer_credit', 'Footer Credit?:', 'H5BP_Annex_footer_credit_setting', 'annex-admin', 'main_section');
@@ -226,8 +228,7 @@
 				echo '<input class="check-field" type="checkbox" name="plugin_options[H5BP_Annex_favicon_ithing]" value="true" ' .$checked. '/>';
 				echo '<p>To allow <em><abbr title="iPhone, iTouch, iPad...">iThing</abbr></em> users to <a href="http://developer.apple.com/library/safari/#documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html">add an icon for your site to their Home screen</a>, place the "apple-touch-icon.png" file in the root directory of your site.</p>';
 				echo '<p>If the file is in the right location, you don\'t really need to select this option, browsers will automatically look there and no additional code will be added to your pages.</p>';
-				echo '<p>Based upon <a href="http://mathiasbynens.be/notes/touch-icons">this Touch Icons research</a>, the icon code will be added in the specific order seen below.';
-				echo '<p>Selecting this option will add the following code to the <code class="html">&lt;head&gt;</code> of your pages:</p>';
+				echo '<p>Based upon <a href="http://mathiasbynens.be/notes/touch-icons">this Touch Icons research</a>, the icon code will be added to the <code class="html">&lt;head&gt;</code> of your pages in the specific order seen below:</p>';
 				echo '<p><strong>(Be sure to relocate all the icons to the root directory!)</strong></p>';
 				echo '<code>&lt;link rel=<span>"apple-touch-icon"</span> sizes=<span>"144x144"</span> href=<span>"/apple-touch-icon-144x144-precomposed.png"</span>&gt;</code>';
 				echo '<code>&lt;link rel=<span>"apple-touch-icon"</span> sizes=<span>"114x114"</span> href=<span>"/apple-touch-icon-114x114-precomposed.png"</span>&gt;</code>';
@@ -249,8 +250,8 @@
 				echo '<code><b>&lt;</b>script src=<span>"' .H5BP_ANNEX_URL. '/js/vendor/modernizr.js"</span><b>&gt;&lt;/</b>script<b>&gt;</b></code>';
 				echo '<p><strong>Note: If you do <em>not</em> include Modernizr, the IEShiv JS <em>will</em> be added to weaker browsers to accommodate the HTML5 elements used in H5Bp Annex:</strong></p>';
 				echo '<code class="comment">&lt;!--[if lt IE 9]&gt;</code>';
-				echo '<code class="comment">&lt;script src="//html5shiv.googlecode.com/svn/trunk/html5.js" onload="window.ieshiv=true;"&gt;&lt;/script&gt;</code>';
-				echo '<code class="comment">	&lt;script&gt;!window.ieshiv && document.write(unescape(\'&lt;script src="' .H5BP_ANNEX_URL. '/js/ieshiv.js"&gt;&lt;/script&gt;\'))&lt;/script&gt;</code>';
+				echo '<code class="comment">&lt;script src="//html5shiv.googlecode.com/svn/trunk/html5.js"&gt;&lt;/script&gt;</code>';
+				echo '<code class="comment">&lt;script&gt;!window.html5 || document.write(unescape(\'&lt;script src="' .H5BP_ANNEX_URL. '/js/ieshiv.js"&gt;&lt;/script&gt;\'))&lt;/script&gt;</code>';
 				echo '<code class="comment">&lt;![endif]--&gt;</code>';
 			}
 		endif; // H5BP_Annex_modernizr_js_setting
@@ -272,7 +273,7 @@
 			function H5BP_Annex_jquery_js_setting() {
 				$options = get_option('plugin_options');
 				$checked = (isset($options['H5BP_Annex_jquery_js']) && $options['H5BP_Annex_jquery_js']) ? 'checked="checked" ' : '';
-				$version = (isset($options['H5BP_Annex_jquery_version']) && $options['H5BP_Annex_jquery_version'] && $options['H5BP_Annex_jquery_version'] !== '') ? $options['H5BP_Annex_jquery_version'] : '1.9.1';
+				$version = (isset($options['H5BP_Annex_jquery_version']) && $options['H5BP_Annex_jquery_version'] && $options['H5BP_Annex_jquery_version'] !== '') ? $options['H5BP_Annex_jquery_version'] : '1.10.1';
 				$inhead = (isset($options['H5BP_Annex_jquery_head']) && $options['H5BP_Annex_jquery_head']) ? 'checked="checked" ' : '';
 				echo '<input class="check-field" type="checkbox" name="plugin_options[H5BP_Annex_jquery_js]" value="true" ' .$checked. '/>';
 				echo '<p><a href="http://jquery.com/">jQuery</a> is a JS library that aids greatly in developing high-quality JavaScript quickly and efficiently.</p>';
@@ -298,7 +299,7 @@
 				echo '<p>This allows you to maintain your own code that will not get overwritten during Theme updates.</p>';
 				echo '<p><strong>I also recommend downloading and concatenating your plugins together in this single JS file.  This will <a href="http://developer.yahoo.com/performance/rules.html">reduce your site\'s HTTP Requests</a>, making your site a better experience.</strong></p>';
 				echo '<p>Selecting this option will add the following code to your pages just before the <code class="html">&lt;/body&gt;</code>:</p>';
-				echo '<code><b>&lt;</b>script src<b>=</b><span>\'' .H5BP_ANNEX_CHILD_URL. '/js/plugins.js?ver=x\'</span><b>&gt;&lt;</b>/script<b>&gt;</b></code>';
+				echo '<code><b>&lt;</b>script src<b>=</b><span>\'' .H5BP_ANNEX_CHILD_URL. '/js/plugins.js\'</span><b>&gt;&lt;</b>/script<b>&gt;</b></code>';
 				echo '<p>(The single quotes and no-longer-necessary attributes are from WP, would like to fix that... maybe next update...)</p>';
 				echo '<p><strong>Note: If you do <em>not</em> include jQuery, this file will <em>not</em> be added to the page.</strong></p>';
 			}
@@ -488,7 +489,7 @@
 			function H5BP_Annex_add_jquery_script() {
 				$cache = H5BP_Annex_cache_buster();
 				$options = get_option('plugin_options');
-				$version = ($options['H5BP_Annex_jquery_version']) ? $options['H5BP_Annex_jquery_version'] : '1.9.1';
+				$version = ($options['H5BP_Annex_jquery_version']) ? $options['H5BP_Annex_jquery_version'] : '1.10.1';
 				wp_deregister_script( 'jquery' ); // get rid of WP's jQuery
 				echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/'.$version.'/jquery.min.js"></script>'.PHP_EOL; // try getting from CDN
 				echo '<script>window.jQuery || document.write(\'<script src="' .H5BP_ANNEX_URL. '/js/vendor/jquery.js'.$cache.'"><\/script>\')</script>'.PHP_EOL; // fallback to local if CDN fails
