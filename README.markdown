@@ -8,7 +8,7 @@
 
 ##  Project origins
 * Twenty Eleven Theme [http://wordpress.org/extend/themes/twentyeleven] (http://wordpress.org/extend/themes/twentyeleven)
-* HTML5 Boilerplate [https://github.com/paulirish/html5-boilerplate](https://github.com/paulirish/html5-boilerplate)
+* HTML5 Boilerplate [https://github.com/h5bp/html5-boilerplate](https://github.com/h5bp/html5-boilerplate)
 * Aaron T. Grogg's Boilerplate [http://aarontgrogg.com/2010/10/06/my-first-wp-theme-boilerplate-starkers/] (http://aarontgrogg.com/2010/10/06/my-first-wp-theme-boilerplate-starkers/)
 
 ## License:
