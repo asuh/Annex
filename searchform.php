@@ -1,6 +1,6 @@
 <?php
 /**
- * The template for displaying search forms in Twenty Eleven
+ * The template for displaying search forms in Annex
  *
  * @package WordPress
  * @subpackage Annex
