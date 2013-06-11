@@ -62,10 +62,9 @@ if ( ! function_exists( 'annex_setup' ) ):
  *
  * @uses load_theme_textdomain() For translation/localization support.
  * @uses add_editor_style() To style the visual editor.
- * @uses add_theme_support() To add support for post thumbnails, automatic feed links, and Post Formats.
+ * @uses add_theme_support() To add support for post thumbnails, automatic feed links, custom headers
+ * 	and backgrounds, and post formats.
  * @uses register_nav_menus() To add support for navigation menus.
- * @uses add_custom_background() To add support for a custom background.
- * @uses add_custom_image_header() To add support for a custom header.
  * @uses register_default_headers() To register the default custom header images provided with the theme.
  * @uses set_post_thumbnail_size() To set a custom post thumbnail size.
  *
@@ -79,11 +78,6 @@ function annex_setup() {
 	 * to change 'annex' to the name of your theme in all the template files.
 	 */
 	load_theme_textdomain( 'annex', get_template_directory() . '/languages' );
-
-	$locale = get_locale();
-	$locale_file = get_template_directory() . "/languages/$locale.php";
-	if ( is_readable( $locale_file ) )
-		require_once( $locale_file );
 
 	// This theme styles the visual editor with editor-style.css to match the theme style.
 	add_editor_style();
@@ -103,43 +97,64 @@ function annex_setup() {
 	// Add support for a variety of post formats
 	add_theme_support( 'post-formats', array( 'aside', 'link', 'gallery', 'status', 'quote', 'image' ) );
 
-	// Add support for custom backgrounds
-	add_custom_background();
+	$theme_options = annex_get_theme_options();
+	if ( 'dark' == $theme_options['color_scheme'] )
+		$default_background_color = '1d1d1d';
+	else
+		$default_background_color = 'e2e2e2';
+
+	// Add support for custom backgrounds.
+	add_theme_support( 'custom-background', array(
+		// Let WordPress know what our default background color is.
+		// This is dependent on our current color scheme.
+		'default-color' => $default_background_color,
+	) );
 
 	// This theme uses Featured Images (also known as post thumbnails) for per-post/per-page Custom Header images
 	add_theme_support( 'post-thumbnails' );
 
-	// The next four constants set how Annex supports custom headers.
+	// Add support for custom headers.
+	$custom_header_support = array(
+		// The default header text color.
+		'default-text-color' => '000',
+		// The height and width of our custom header.
+		'width' => apply_filters( 'annex_header_image_width', 1000 ),
+		'height' => apply_filters( 'annex_header_image_height', 288 ),
+		// Support flexible heights.
+		'flex-height' => true,
+		// Random image rotation by default.
+		'random-default' => true,
+		// Callback for styling the header.
+		'wp-head-callback' => 'annex_header_style',
+		// Callback for styling the header preview in the admin.
+		'admin-head-callback' => 'annex_admin_header_style',
+		// Callback used to display the header preview in the admin.
+		'admin-preview-callback' => 'annex_admin_header_image',
+	);
 
-	// The default header text color
-	define( 'HEADER_TEXTCOLOR', '000' );
+	add_theme_support( 'custom-header', $custom_header_support );
 
-	// By leaving empty, we allow for random image rotation.
-	define( 'HEADER_IMAGE', '' );
-
-	// The height and width of your custom header.
-	// Add a filter to annex_header_image_width and annex_header_image_height to change these values.
-	define( 'HEADER_IMAGE_WIDTH', apply_filters( 'annex_header_image_width', 1000 ) );
-	define( 'HEADER_IMAGE_HEIGHT', apply_filters( 'annex_header_image_height', 288 ) );
+	if ( ! function_exists( 'get_custom_header' ) ) {
+		// This is all for compatibility with versions of WordPress prior to 3.4.
+		define( 'HEADER_TEXTCOLOR', $custom_header_support['default-text-color'] );
+		define( 'HEADER_IMAGE', '' );
+		define( 'HEADER_IMAGE_WIDTH', $custom_header_support['width'] );
+		define( 'HEADER_IMAGE_HEIGHT', $custom_header_support['height'] );
+		add_custom_image_header( $custom_header_support['wp-head-callback'], $custom_header_support['admin-head-callback'], $custom_header_support['admin-preview-callback'] );
+		add_custom_background();
+	}
 
 	// We'll be using post thumbnails for custom header images on posts and pages.
 	// We want them to be the size of the header image that we just defined
 	// Larger images will be auto-cropped to fit, smaller ones will be ignored. See header.php.
-	set_post_thumbnail_size( HEADER_IMAGE_WIDTH, HEADER_IMAGE_HEIGHT, true );
+	set_post_thumbnail_size( $custom_header_support['width'], $custom_header_support['height'], true );
 
-	// Add Annex's custom image sizes
-	add_image_size( 'large-feature', HEADER_IMAGE_WIDTH, HEADER_IMAGE_HEIGHT, true ); // Used for large feature (header) images
-	add_image_size( 'small-feature', 500, 300 ); // Used for featured posts if a large-feature doesn't exist
-
-	// Turn on random header image rotation by default.
-	add_theme_support( 'custom-header', array( 'random-default' => true ) );
-
-	// Add a way for the custom header to be styled in the admin panel that controls
-	// custom headers. See annex_admin_header_style(), below.
-	add_custom_image_header( 'annex_header_style', 'annex_admin_header_style', 'annex_admin_header_image' );
-
-	// ... and thus ends the changeable header business.
-
+	// Add Annex's custom image sizes.
+	// Used for large feature (header) images.
+	add_image_size( 'large-feature', $custom_header_support['width'], $custom_header_support['height'], true );
+	// Used for featured posts if a large-feature doesn't exist.
+	add_image_size( 'small-feature', 500, 300 );
+	
 	// Default custom headers packaged with the theme. %s is a placeholder for the theme template directory URI.
 	register_default_headers( array(
 		'annex' => array(
@@ -159,17 +174,18 @@ if ( ! function_exists( 'annex_header_style' ) ) :
  * @since Twenty Eleven 1.0
  */
 function annex_header_style() {
+	$text_color = get_header_textcolor();
 
-	// If no custom options for text are set, let's bail
-	// get_header_textcolor() options: HEADER_TEXTCOLOR is default, hide text (returns 'blank') or any hex value
-	if ( HEADER_TEXTCOLOR == get_header_textcolor() )
+	// If no custom options for text are set, let's bail.
+	if ( $text_color == HEADER_TEXTCOLOR )
 		return;
+
 	// If we get this far, we have custom styles. Let's do this.
 	?>
 	<style type="text/css">
 	<?php
 		// Has the text been hidden?
-		if ( 'blank' == get_header_textcolor() ) :
+		if ( 'blank' == $text_color ) :
 	?>
 		#site-title,
 		#site-description {
@@ -183,7 +199,7 @@ function annex_header_style() {
 	?>
 		#site-title a,
 		#site-description {
-			color: #<?php echo get_header_textcolor(); ?> !important;
+			color: #<?php echo $text_color; ?> !important;
 		}
 	<?php endif; ?>
 	</style>
@@ -195,7 +211,7 @@ if ( ! function_exists( 'annex_admin_header_style' ) ) :
 /**
  * Styles the header image displayed on the Appearance > Header admin panel.
  *
- * Referenced via add_custom_image_header() in annex_setup().
+ * Referenced via add_theme_support('custom-header') in twentyeleven_setup().
  *
  * @since Twenty Eleven 1.0
  */
@@ -245,23 +261,24 @@ if ( ! function_exists( 'annex_admin_header_image' ) ) :
 /**
  * Custom header image markup displayed on the Appearance > Header admin panel.
  *
- * Referenced via add_custom_image_header() in annex_setup().
+ * Referenced via add_theme_support('custom-header') in annex_setup().
  *
  * @since Twenty Eleven 1.0
  */
 function annex_admin_header_image() { ?>
 	<div id="headimg">
 		<?php
-		if ( 'blank' == get_theme_mod( 'header_textcolor', HEADER_TEXTCOLOR ) || '' == get_theme_mod( 'header_textcolor', HEADER_TEXTCOLOR ) )
-			$style = ' style="display:none;"';
+		$color = get_header_textcolor();
+		$image = get_header_image();
+		if ( $color && $color != 'blank' )
+			$style = ' style="color:#' . $color . '"';
 		else
-			$style = ' style="color:#' . get_theme_mod( 'header_textcolor', HEADER_TEXTCOLOR ) . ';"';
+			$style = ' style="display:none"';
 		?>
 		<h1><a id="name"<?php echo $style; ?> onclick="return false;" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
 		<div id="desc"<?php echo $style; ?>><?php bloginfo( 'description' ); ?></div>
-		<?php $header_image = get_header_image();
-		if ( ! empty( $header_image ) ) : ?>
-			<img src="<?php echo esc_url( $header_image ); ?>" alt="" />
+		<?php if ( $image ) : ?>
+			<img src="<?php echo esc_url( $image ); ?>" alt="" />
 		<?php endif; ?>
 	</div>
 <?php }
@@ -278,12 +295,14 @@ function annex_excerpt_length( $length ) {
 }
 add_filter( 'excerpt_length', 'annex_excerpt_length' );
 
+if ( ! function_exists( 'twentyeleven_continue_reading_link' ) ) :
 /**
  * Returns a "Continue Reading" link for excerpts
  */
 function annex_continue_reading_link() {
 	return ' <a href="'. esc_url( get_permalink() ) . '">' . __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'annex' ) . '</a>';
 }
+endif; // twentyeleven_continue_reading_link
 
 /**
  * Replaces "[...]" (appended to automatically generated excerpts) with an ellipsis and annex_continue_reading_link().
@@ -314,7 +333,8 @@ add_filter( 'get_the_excerpt', 'annex_custom_excerpt_more' );
  * Get our wp_nav_menu() fallback, wp_page_menu(), to show a home link.
  */
 function annex_page_menu_args( $args ) {
-	$args['show_home'] = true;
+	if ( ! isset( $args['show_home'] ) )
+		$args['show_home'] = true;
 	return $args;
 }
 add_filter( 'wp_page_menu_args', 'annex_page_menu_args' );
@@ -383,7 +403,7 @@ if ( ! function_exists( 'annex_content_nav' ) ) :
 /**
  * Display navigation to next/previous pages when applicable
  */
-function annex_content_nav( $nav_id ) {
+function annex_content_nav( $html_id ) {
 	global $wp_query;
 
 	if ( $wp_query->max_num_pages > 1 ) : ?>
@@ -519,7 +539,7 @@ if ( ! function_exists( 'annex_posted_on' ) ) :
  * @since Twenty Eleven 1.0
  */
 function annex_posted_on() {
-	printf( __( '<span class="sep">Posted on </span><a href="%1$s" title="%2$s" rel="bookmark"><time class="entry-date" datetime="%3$s" pubdate>%4$s</time></a><span class="by-author"> <span class="sep"> by </span> <span class="author vcard"><a class="url fn n" href="%5$s" title="%6$s" rel="author">%7$s</a></span></span>', 'annex' ),
+	printf( __( '<span class="sep">Posted on </span><a href="%1$s" title="%2$s" rel="bookmark"><time class="entry-date" datetime="%3$s">%4$s</time></a><span class="by-author"> <span class="sep"> by </span> <span class="author vcard"><a class="url fn n" href="%5$s" title="%6$s" rel="author">%7$s</a></span></span>', 'annex' ),
 		esc_url( get_permalink() ),
 		esc_attr( get_the_time() ),
 		esc_attr( get_the_date( 'c' ) ),
@@ -587,26 +607,52 @@ function annex_gallery_style($css) {
 	return preg_replace("!<style type='text/css'>(.*?)</style>!s", '', $css);
 }
 
+function annex_head_cleanup() {
 // remove junk from head
-	remove_action('wp_head', 'rsd_link');
-	remove_action('wp_head', 'wp_generator');
-	remove_action('wp_head', 'feed_links', 2);
-	remove_action('wp_head', 'index_rel_link');
-	remove_action('wp_head', 'wlwmanifest_link');
-	remove_action('wp_head', 'feed_links_extra', 3);
-	remove_action('wp_head', 'start_post_rel_link', 10, 0);
-	remove_action('wp_head', 'parent_post_rel_link', 10, 0);
-	remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
-	   add_action('wp_head', 'annex_remove_recent_comments_style', 1);	
-	   add_filter('gallery_style', 'annex_gallery_style');
-	   add_filter('the_generator', 'complete_version_removal');
+remove_action('wp_head', 'feed_links', 2);
+remove_action('wp_head', 'feed_links_extra', 3);
+remove_action('wp_head', 'rsd_link');
+remove_action('wp_head', 'wlwmanifest_link');
+remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
+remove_action('wp_head', 'wp_generator');
+remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
+   add_action('wp_head', 'annex_remove_recent_comments_style', 1);	
+   add_filter('gallery_style', 'annex_gallery_style');
+   add_filter('the_generator', 'complete_version_removal');
+
+  global $wp_widget_factory;
+  remove_action('wp_head', array($wp_widget_factory->widgets['WP_Widget_Recent_Comments'], 'recent_comments_style'));
+
+  add_filter('use_default_gallery_style', '__return_null');
+
+  if (!class_exists('WPSEO_Frontend')) {
+    remove_action('wp_head', 'rel_canonical');
+    add_action('wp_head', 'annex_rel_canonical');
+  }
+}
+
+function annex_rel_canonical() {
+  global $wp_the_query;
+
+  if (!is_singular()) {
+    return;
+  }
+
+  if (!$id = $wp_the_query->get_queried_object_id()) {
+    return;
+  }
+
+  $link = get_permalink($id);
+  echo "\t<link rel=\"canonical\" href=\"$link\">\n";
+}
+add_action('init', 'annex_head_cleanup');
+
 
 // kill the admin nag
 if (!current_user_can('edit_users')) {
 	add_action('init', create_function('$a', "remove_action('init', 'wp_version_check');"), 2);
 	add_filter('pre_option_update_core', create_function('$a', "return null;"));
 }
-
 
 // remove login errors
 // http://tutzone.net/2011/02/how-to-hide-login-errors-in-wordpress.html
@@ -620,7 +666,6 @@ function annex_robots() {
 	echo "Disallow: /wp-admin\n";
 	echo "Disallow: /wp-includes\n";
 	echo "Disallow: /wp-content/plugins\n";
-	echo "Disallow: /plugins\n";
 	echo "Disallow: /wp-content/cache\n";
 	echo "Disallow: /wp-content/themes\n";
 	echo "Disallow: /trackback\n";
@@ -630,7 +675,6 @@ function annex_robots() {
 	echo "Disallow: */trackback\n";
 	echo "Disallow: */feed\n";
 	echo "Disallow: */comments\n";
-	echo "Disallow: /*?*\n";
 	echo "Disallow: /*?\n";
 	echo "Allow: /wp-content/uploads\n";
 	echo "Allow: /assets";
@@ -732,6 +776,91 @@ class annex_vcard extends WP_Widget {
 } 
 register_widget('annex_vcard');
 
+/**
+ * Remove the WordPress version from RSS feeds
+ */
+add_filter('the_generator', '__return_false');
+
+/**
+ * Clean up language_attributes() used in <html> tag
+ *
+ * Change lang="en-US" to lang="en"
+ * Remove dir="ltr"
+ */
+function annex_language_attributes() {
+  $attributes = array();
+  $output = '';
+
+  if (function_exists('is_rtl')) {
+    if (is_rtl() == 'rtl') {
+      $attributes[] = 'dir="rtl"';
+    }
+  }
+
+  $lang = get_bloginfo('language');
+
+  if ($lang && $lang !== 'en-US') {
+    $attributes[] = "lang=\"$lang\"";
+  } else {
+    $attributes[] = 'lang="en"';
+  }
+
+  $output = implode(' ', $attributes);
+  $output = apply_filters('annex_language_attributes', $output);
+
+  return $output;
+}
+add_filter('language_attributes', 'annex_language_attributes');
+
+/**
+ * Remove unnecessary dashboard widgets
+ *
+ * @link http://www.deluxeblogtips.com/2011/01/remove-dashboard-widgets-in-wordpress.html
+ */
+function annex_remove_dashboard_widgets() {
+  remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
+  remove_meta_box('dashboard_plugins', 'dashboard', 'normal');
+  remove_meta_box('dashboard_primary', 'dashboard', 'normal');
+  remove_meta_box('dashboard_secondary', 'dashboard', 'normal');
+}
+add_action('admin_init', 'annex_remove_dashboard_widgets');
+
+/**
+ * Redirects search results from /?s=query to /search/query/, converts %20 to +
+ *
+ * @link http://txfx.net/wordpress-plugins/nice-search/
+ */
+function annex_nice_search_redirect() {
+  global $wp_rewrite;
+  if (!isset($wp_rewrite) || !is_object($wp_rewrite) || !$wp_rewrite->using_permalinks()) {
+    return;
+  }
+
+  $search_base = $wp_rewrite->search_base;
+  if (is_search() && !is_admin() && strpos($_SERVER['REQUEST_URI'], "/{$search_base}/") === false) {
+    wp_redirect(home_url("/{$search_base}/" . urlencode(get_query_var('s'))));
+    exit();
+  }
+}
+if (current_theme_supports('nice-search')) {
+  add_action('template_redirect', 'annex_nice_search_redirect');
+}
+
+/**
+ * Fix for empty search queries redirecting to home page
+ *
+ * @link http://wordpress.org/support/topic/blank-search-sends-you-to-the-homepage#post-1772565
+ * @link http://core.trac.wordpress.org/ticket/11330
+ */
+function annex_request_filter($query_vars) {
+  if (isset($_GET['s']) && empty($_GET['s'])) {
+    $query_vars['s'] = ' ';
+  }
+
+  return $query_vars;
+}
+add_filter('request', 'annex_request_filter');
+
 // custom admin login logo
 function annex_custom_login_logo() {
 	echo '<style type="text/css">
@@ -751,45 +880,6 @@ function ie_chrome_frame() {
 // Boilerplate Footer Credits Custom Hook
 function annex_credits() {
 	do_action('annex_credits');
-}
-
-// remove dir and set lang="en" as default (rather than en-US)
-// https://github.com/retlehs/roots/issues/80
-function annex_language_attributes() {
-	$attributes = array();
-	$output = '';
-	$lang = get_bloginfo('language');
-	if ($lang && $lang !== 'en-US') {
-		$attributes[] = "lang=\"$lang\"";
-	} else {
-		$attributes[] = 'lang="en"';
-	}
-
-	$output = implode(' ', $attributes);
-	$output = apply_filters('annex_language_attributes', $output);
-	return $output;
-}
-
-add_filter('language_attributes', 'annex_language_attributes');
-
-// http://www.deluxeblogtips.com/2011/01/remove-dashboard-widgets-in-wordpress.html
-function annex_remove_dashboard_widgets() {
-	remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
-	remove_meta_box('dashboard_plugins', 'dashboard', 'normal');
-	remove_meta_box('dashboard_primary', 'dashboard', 'normal');
-	remove_meta_box('dashboard_secondary', 'dashboard', 'normal');
-}
-
-add_action('admin_init', 'annex_remove_dashboard_widgets');
-
-//clean up the default WordPress style tags
-add_filter('style_loader_tag', 'annex_clean_style_tag');
-
-function annex_clean_style_tag($input) {
-  preg_match_all("!<link rel='stylesheet'\s?(id='[^']+')?\s+href='(.*)' type='text/css' media='(.*)' />!", $input, $matches);
-  //only display media if it's print
-  $media = $matches[3][0] === 'print' ? ' media="print"' : '';                                                                             
-  return '<link rel="stylesheet" href="' . $matches[2][0] . '"' . $media . '>' . "\n";
 }
 
 /**
