@@ -2,7 +2,7 @@
 	Theme Name: annex
 	Theme URI: https://github.com/asuh/Annex
 	Description: The naked Twenty Eleven theme (<a href="http://wordpress.org/extend/themes/twentyeleven">http://wordpress.org/extend/themes/twentyeleven</a>) + HTML5 Boilerplate (<a href="http://html5boilerplate.com/">http://html5boilerplate.com/</a>) + Boilerplate (<a href="http://wordpress.org/extend/themes/boilerplate">http://wordpress.org/extend/themes/boilerplate</a>) all in one! Thanks to the WordPress team, Paul Irish, Aaron Grogg, and the rest of the H5BP community for all their work on the themes. Annex is designed as a Parent theme with a built-in Child theme template (<a href="http://codex.wordpress.org/Child_Themes">http://codex.wordpress.org/Child_Themes</a>), integrated as a starting point and allowing you to easily alter the code as needed.
-	Version: 1.0
+	Version: 4.3.2
     Author: Micah Cambre
     Author URI: http://twolanedesign.com
 	Tags: one-column, two-columns, left-sidebar, right-sidebar, fixed-width, flexible-width, custom-background, custom-header, custom-menu, editor-style, featured-image-header, featured-images, full-width-template, microformats, post-formats, rtl-language-support, sticky-post, theme-options, translation-ready
@@ -11,7 +11,7 @@
 	License URI:	http://unlicense.org/
 */
 
-/*! normalize.css v1.1.0 | MIT License | git.io/normalize */
+/*! normalize.css v1.1.2 | MIT License | git.io/normalize */
 
 /* ==========================================================================
    HTML5 display definitions
@@ -80,8 +80,8 @@ audio:not([controls]) {
 
 html {
     font-size: 100%; /* 1 */
-    -webkit-text-size-adjust: 100%; /* 2 */
     -ms-text-size-adjust: 100%; /* 2 */
+    -webkit-text-size-adjust: 100%; /* 2 */
 }
 
 /**
@@ -540,6 +540,7 @@ table {
 }
 
 
+
 /*
  * HTML5 Boilerplate
  *
@@ -567,7 +568,7 @@ body {
 
 /*
  * Remove text-shadow in selection highlight: h5bp.com/i
- * These selection declarations have to be separate.
+ * These selection rule sets have to be separate.
  * Customize the background color to match your design.
  */
 
@@ -754,7 +755,7 @@ textarea {
 
 /* ==========================================================================
    EXAMPLE Media Queries for Responsive Design.
-   Theses examples override the primary ('mobile first') styles.
+   These examples override the primary ('mobile first') styles.
    Modify as content requires.
    ========================================================================== */
 
@@ -767,7 +768,7 @@ textarea {
        (-webkit-min-device-pixel-ratio: 1.25),
        (min-resolution: 120dpi) {
     /* Style adjustments for high resolution devices */
-}     
+}
    
 /* =============================================================================
    Common WordPress styles
@@ -921,7 +922,6 @@ article.intro .edit-link a:active {
 	clip: rect(1px, 1px, 1px, 1px);
 	position: absolute !important;
 }
-
 
 /* ==========================================================================
    Print styles.
