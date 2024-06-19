@@ -1,6 +1,7 @@
-#  Annex - HTML5 Boilerplate WordPress Theme
+# DEPRECATED
+This project won't undergo any further updates. I'm active on another repository called [Forage](https://github.com/asuh/forage/) which has some of this plus more and doesn't support legacy browsers.
 
-## I NEED YOUR HELP! Contact me if you can help contribute to make this better. I need some more eyes and experience to make this theme awesome. :)
+##  Annex - HTML5 Boilerplate WordPress Theme
 
 ## To Do List
 * Because of the complexity, certain WordPress styles should stay in the stylesheet to allow for quicker developement. I need help discerning which should be added back from Twenty Eleven.
